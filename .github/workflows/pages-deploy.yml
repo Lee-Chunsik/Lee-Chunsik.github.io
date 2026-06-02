@@ -56,6 +56,17 @@ jobs:
             \-\-disable-external \
             \-\-ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
 
+      - name: Install staticrypt
+        run: npm install -g staticrypt
+
+      - name: Encrypt protected posts
+        run: |
+          find "_site${{ steps.pages.outputs.base_path }}" -name "index.html" -path "*/posts/*" | while read file; do
+            if grep -q "protected: true" "$file"; then
+              staticrypt "$file" -p "${{ secrets.PASSWORD }}" --short -d "$(dirname $file)"
+            fi
+          done
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v4
         with:
