@@ -62,7 +62,15 @@ jobs:
       - name: Encrypt protected posts
         run: |
           find "_site${{ steps.pages.outputs.base_path }}" -name "index.html" -path "*/protected-*" | while read file; do
-            staticrypt "$file" -p "${{ secrets.PASSWORD }}" --short -d "$(dirname $file)"
+            staticrypt "$file" -p "${{ secrets.PASSWORD }}" --short \
+              --template-color-primary "#4a9eff" \
+              --template-color-secondary "#1a1a2e" \
+              --template-title "🔒 Protected Post" \
+              --template-instructions "비공개 머신입니다. 비밀번호를 입력하세요." \
+              --template-button "UNLOCK" \
+              --template-placeholder "Password" \
+              --template-error "비밀번호가 틀렸습니다!" \
+              -d "$(dirname $file)"
           done
 
       - name: Upload site artifact
