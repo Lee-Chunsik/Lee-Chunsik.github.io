@@ -166,7 +166,7 @@ support:#00^BlackKnight
 
 획득한 크리덴셜을 사용하여 `bloodhound`를 통해 `support`유저는 `Audit2020`유저에 대해 비밀번호 변경 권한을 가지고있다.
 
-![bloodhound](assets/img/posts/Blakfield/bloodhound.png)
+![bloodhound](assets/img/posts/Blackfield/bloodhound.png)
 
 ## Initial Access
 
