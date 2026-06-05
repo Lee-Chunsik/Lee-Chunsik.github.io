@@ -1,6 +1,6 @@
 ---
 title: "HTB - Cobblestone [Insane]"
-date: 2026-01-01 00:00:00 +0900
+date: 2026-06-05 00:00:00 +0900
 categories: [HTB, Machine, Linux]
 tags: [htb, writeup, walkthrough, linux, insane]
 protected: true
