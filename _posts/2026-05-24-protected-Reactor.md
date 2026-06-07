@@ -2,7 +2,7 @@
 title: "HTB - Reactor [Easy]"
 date: 2026-05-24 00:00:00 +0900
 categories: [HTB, Machine, Linux]
-tags: [htb, writeup, walkthrough, linux, easy]
+tags: [htb, writeup, walkthrough, linux, easy, season11]
 protected: true
 description: HackTheBox - Reactor [Easy] Walkthrough
 ---
