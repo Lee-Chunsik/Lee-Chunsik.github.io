@@ -1,8 +1,8 @@
 ---
 title: "HTB - DarkZeroReturns [Hard]"
 date: 2026-07-29 00:00:00 +0900
-categories: [HTB, Machine, Linux]
-tags: [htb, writeup, walkthrough, AD, windows, linux, Hard, season11]
+categories: [HTB, AD]
+tags: [htb, writeup, walkthrough, AD, Active Directory, linux, Hard, season11]
 protected: true
 description: HackTheBox - DarkZeroReturns [Hard] Walkthrough
 ---

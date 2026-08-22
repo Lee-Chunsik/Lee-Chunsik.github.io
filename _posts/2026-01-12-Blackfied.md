@@ -1,7 +1,7 @@
 ---
 title: "HTB - Blackfield [Hard]"
 date: 2026-01-12 00:00:00 +0900
-categories: [HTB, Machine, AD]
+categories: [HTB, AD]
 tags: [htb, writeup, walkthrough, AD, Active Directory, hard, OSCP, ntds, AS-REP Roasting, lsass]
 description: HackTheBox - Blackfield [Hard] Walkthrough
 ---

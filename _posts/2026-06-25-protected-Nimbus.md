@@ -1,8 +1,8 @@
 ---
 title: "HTB - Nimbus [Hard]"
 date: 2026-06-25 00:00:00 +0900
-categories: [HTB, Machine, Linux]
-tags: [htb, writeup, walkthrough, hard, linux]
+categories: [HTB, Linux]
+tags: [htb, writeup, walkthrough, hard, linux, season11]
 protected: true
 description: HackTheBox - Nimbus [Hard] Walkthrough
 ---

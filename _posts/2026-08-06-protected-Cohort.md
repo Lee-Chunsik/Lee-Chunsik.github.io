@@ -1,7 +1,7 @@
 ---
 title: "HTB - Cohort [Easy]"
 date: 2026-08-06 00:00:00 +0900
-categories: [HTB, Machine, Linux]
+categories: [HTB, Linux]
 tags: [htb, writeup, walkthrough, linux, easy, season11]
 protected: true
 description: HackTheBox - Cohort [Easy] Walkthrough

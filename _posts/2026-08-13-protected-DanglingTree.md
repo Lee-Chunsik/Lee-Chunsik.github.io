@@ -1,8 +1,8 @@
 ---
 title: "HTB - DanglingTree [Medium]"
 date: 2026-08-13 00:00:00 +0900
-categories: [HTB, Machine, Linux]
-tags: [htb, writeup, walkthrough, AD, windows, high, season11]
+categories: [HTB, AD]
+tags: [htb, writeup, walkthrough, AD, Active Directory, windows, high, season11]
 protected: true
 description: HackTheBox - DanglingTree [Medium] Walkthrough
 ---

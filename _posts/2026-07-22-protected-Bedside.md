@@ -1,7 +1,7 @@
 ---
 title: "HTB - Bedside [Medium]"
 date: 2026-07-22 00:00:00 +0900
-categories: [HTB, Machine, Linux]
+categories: [HTB, Linux]
 tags: [htb, writeup, walkthrough, linux, medium, season11]
 protected: true
 description: HackTheBox - Bedside [Medium] Walkthrough
