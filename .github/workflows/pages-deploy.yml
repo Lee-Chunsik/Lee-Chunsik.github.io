@@ -58,6 +58,15 @@ jobs:
 
       - name: Install staticrypt
         run: npm install -g staticrypt
+        
+      - name: Debug protected post paths
+        run: |
+          echo "=== protected paths ==="
+          find "_site${{ steps.pages.outputs.base_path }}" -type f | grep -i protected || true
+
+          echo "=== all post index files ==="
+          find "_site${{ steps.pages.outputs.base_path }}" -type f -name "index.html"
+
 
       - name: Encrypt protected posts
         run: |
