@@ -2,7 +2,7 @@
 title: "HTB - PingPong [Insane]"
 date: 2026-05-27 00:00:00 +0900
 categories: [HTB, AD]
-tags: [htb, writeup, walkthrough, AD, insane]
+tags: [htb, writeup, walkthrough, AD, Active Directory, insane]
 protected: true
 description: HackTheBox - PingPong [Insane] Walkthrough
 ---
